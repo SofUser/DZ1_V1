@@ -4,31 +4,43 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int size = getArraySize(scanner);
-        int min = getBound(scanner, "мин");
-        int max = getBound(scanner, "макс", min);
+        try {
+            int size = getArraySize(scanner);
+            int min = getBound(scanner, "мин");
+            int max = getBound(scanner, "макс", min);
 
-        int[] intArray = new int[size];
-        fillArray(intArray, min, max);
-        processArray("целых чисел", intArray);
+            int[] intArray = new int[size];
+            fillArray(intArray, min, max);
+            processArray("целых чисел", intArray);
 
-        double[] doubleArray = new double[size];
-        fillArray(doubleArray, min, max);
-        processArray("дробных чисел", doubleArray);
-
-        scanner.close();
+            double[] doubleArray = new double[size];
+            fillArray(doubleArray, min, max);
+            processArray("дробных чисел", doubleArray);
+        } catch (Exception e) {
+            System.out.println("Произошла непредвиденная ошибка: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
     }
 
     private static int getArraySize(Scanner scanner) {
         int size = 0;
         while (size <= 0) {
             System.out.print("Введите размер массива (>0): ");
-            if (scanner.hasNextInt()) {
-                size = scanner.nextInt();
-            }
-            if (size <= 0) {
-                System.out.println("Ошибка! Размер должен быть >0");
-                scanner.nextLine();
+            try {
+                if (scanner.hasNextInt()) {
+                    size = scanner.nextInt();
+                } else {
+                    System.out.println("Ошибка! Введите целое число");
+                    scanner.nextLine();
+                    continue;
+                }
+
+                if (size <= 0) {
+                    System.out.println("Ошибка! Размер должен быть >0");
+                }
+            } catch (Exception e) {
+                System.out.println("Ошибка ввода: " + e.getMessage());
             }
         }
         return size;
